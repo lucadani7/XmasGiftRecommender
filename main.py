@@ -82,7 +82,19 @@ if user_input:
         for i, (idx, row) in enumerate(results.iterrows()):
             with cols[i % 3]:
                 with st.container(border=True):
-                    st.image(row['img_link'], use_container_width=True)
+                    try:
+                        st.image(row['img_link'], use_container_width=True)
+                    except:
+                        st.image(
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/1024px-Git-logo.svg.png",
+                            use_container_width=True)
+                    percentage_score = int(row['temp_score'] * 100)
+                    color_score = "green" if percentage_score >= 50 else "orange"
+                    st.markdown(f"""
+                                            <div style="background-color: #f0f2f6; padding: 5px; border-radius: 5px; text-align: center; margin-bottom: 10px;">
+                                                AI match: <span style="color: {color_score}; font-weight: bold;">{percentage_score}%</span>
+                                            </div>
+                                        """, unsafe_allow_html=True)
                     st.markdown(f"**{row['product_name'][:50]}...**")
                     st.success(f"Price: {row['price_eur']} €")
                     with st.expander("Why this gift?"):
